@@ -96,62 +96,33 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     // The bounding box coordinates should be written to
     // triangle->rect.x, triangle->rect.y, triangle->rect.w, triangle->rect.h
 
-    if(triangle->sx1 < triangle->rect.x){
-      triangle->rect.x = triangle->sx1;
+    int *sx = &triangle->sx1;
+    int *sy = &triangle->sy1;
+    int *sh = &triangle->sx1;
+    int *sw = &triangle->sy1;
+    for (int i = 0; i < 4; i++) {
+      if (*sx<triangle->rect.x) {
+        triangle->rect.x = *sx;
+      }
+
+      if (*sy<triangle->rect.y) {
+        triangle->rect.y = *sy;
+      }
+
+      if (*sh>triangle->rect.y) {
+        triangle->rect.y = *sh;
+      }
+
+      if (*sw<triangle->rect.x) {
+        triangle->rect.x = *sw;
+      }
+
+      sx += sizeof(int);
+      sy += sizeof(int);
+      sh += sizeof(int);
+      sw += sizeof(int);
+
     }
-
-    if(triangle->sx2 < triangle->rect.x){
-      triangle->rect.x = triangle->sx2;
-    }
-
-    if(triangle->sx3 < triangle->rect.x){
-      triangle->rect.x = triangle->sx3;
-    }
-
-    if(triangle->sy1 < triangle->rect.y){
-      triangle->rect.y = triangle->sy1;
-    }
-
-    if(triangle->sy2 < triangle->rect.y){
-      triangle->rect.y = triangle->sy2;
-    }
-
-    if(triangle->sy3 < triangle->rect.y){
-      triangle->rect.y = triangle->sy3;
-    }
-
-
-
-
-
-    if(triangle->sx1 > triangle->rect.w){
-      triangle->rect.w = triangle->sx1;
-    }
-
-    if(triangle->sx2 > triangle->rect.w){
-      triangle->rect.w = triangle->sx2;
-    }
-
-    if(triangle->sx3 > triangle->rect.w){
-      triangle->rect.w = triangle->sx3;
-    }
-
-    if(triangle->sy1 > triangle->rect.h){
-      triangle->rect.h = triangle->sy1;
-    }
-
-    if(triangle->sy2 > triangle->rect.h){
-      triangle->rect.h = triangle->sy2;
-    }
-
-    if(triangle->sy3 > triangle->rect.h){
-      triangle->rect.h = triangle->sy3;
-    }
-
-    triangle->rect.w -= triangle->rect.x;
-    triangle->rect.h -= triangle->rect.y;
-
-
 }
 
 /*
@@ -168,6 +139,7 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
     // been drawn on the surface.
     int x = triangle->sx1;
     int y = triangle->sy1;
+
     while(get_pixel(surface,x,y) != TRIANGLE_PENCOLOR){
       while(get_pixel(surface,x,y) != TRIANGLE_PENCOLOR){
         set_pixel(surface,x,y,triangle->fillcolor);
@@ -175,6 +147,7 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
       }
       y++;
     }
+
 }
 
 /*

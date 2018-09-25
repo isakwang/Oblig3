@@ -133,20 +133,6 @@ int main(void)
        draw_triangle(surface, &teapot_model[i]);
      }
 
-    /*
-    draw_triangle(surface, &exampletriangle1);
-    printf("1\n");
-    draw_triangle(surface, &exampletriangle2);
-    printf("2\n");
-    draw_triangle(surface, &exampletriangle3);
-    printf("3\n");
-    draw_triangle(surface, &exampletriangle4);
-    printf("4\n");
-    */
-    //int j = sizeof(teapot_model)/sizeof(teapot_model[0]);
-    //for (int i = 0; i < j; i++) {
-    //  draw_triangle(surface, teapot_model[i].x1);
-    //}
     /* Update the texture, it to the video buffer and present it */
     SDL_UpdateTexture(texture, NULL, surface->pixels, surface->pitch);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
