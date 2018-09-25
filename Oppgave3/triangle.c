@@ -102,8 +102,6 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     //For loop that increases surface coordinate each cycle
     int *sx = &triangle->sx1;
     int *sy = &triangle->sy1;
-    int *sh = &triangle->sy1;
-    int *sw = &triangle->sx1;
     for (int i = 0; i < 4; i++) {
       if (*sx<triangle->rect.x) {
         triangle->rect.x = *sx;
@@ -113,18 +111,16 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
         triangle->rect.y = *sy;
       }
 
-      if (*sh>triangle->rect.y) {
-        triangle->rect.h = *sh;
+      if (*sy>triangle->rect.y) {
+        triangle->rect.h = *sy;
       }
 
-      if (*sw<triangle->rect.x) {
-        triangle->rect.w = *sw;
+      if (*sx<triangle->rect.x) {
+        triangle->rect.w = *sx;
       }
       //Counts up by one
       sx += sizeof(int);
       sy += sizeof(int);
-      sh += sizeof(int);
-      sw += sizeof(int);
 
     }
 }
@@ -145,7 +141,8 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
     int x = (triangle->sx1 + triangle->sx2 + triangle->sx3)/3;
     int y = (triangle->sy1 + triangle->sy2 + triangle->sy3)/3;
     //printf("\n%d,%d %d,%d %d,%d\n", triangle->sx1,triangle->sy1,triangle->sx2,triangle->sy2,triangle->sx3,triangle->sy3);
-    printf("laveste er %d og høyeste %d med sentrum %d\n",triangle->rect.x, triangle->rect.w, x);
+    printf("\nlaveste er %d og høyeste %d med sentrum %d\n",triangle->rect.x, triangle->rect.w, x);
+    printf("laveste er %d og høyeste %d med sentrum %d\n",triangle->rect.y, triangle->rect.h, y);
     //i++;
     //printf("%d\n",i );
     /*while(1){
