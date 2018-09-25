@@ -96,6 +96,10 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     // The bounding box coordinates should be written to
     // triangle->rect.x, triangle->rect.y, triangle->rect.w, triangle->rect.h
 
+    //Finds through all x points and sets the rect.x to the lowest one
+    //Does the samething for rect.y and opposite for rect.w and rect.h
+
+    //For loop that increases surface coordinate each cycle
     int *sx = &triangle->sx1;
     int *sy = &triangle->sy1;
     int *sh = &triangle->sx1;
@@ -116,7 +120,7 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
       if (*sw<triangle->rect.x) {
         triangle->rect.x = *sw;
       }
-
+      //Counts up by one
       sx += sizeof(int);
       sy += sizeof(int);
       sh += sizeof(int);
@@ -136,20 +140,27 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
     // approach to filling the triangle relies on looking for the edges of
     // the triangle on the surface (via the GetPixel function), you will find those
     // edges even if the triangle overlaps with a triangle that has already
-    // been drawn on the surface.
-    int x = triangle->sx1;
-    int y = triangle->sy1;
+    // been drawn on the surface
+    int x = (triangle->rect.x + triangle->rect.w)/2;
+    int y = (triangle->rect.y + triangle->rect.h)/2;
+    while(1){
+      if(get_pixel(surface,x,y) != TRIANGLE_PENCOLOR){
+        if(get_pixel(surface,x,y) != triangle->fillcolor){
+          set_pixel(surface,x,y,triangle->fillcolor);
+          y--;
+        }
+        else{
+          set_pixel(surface,x,y, triangle->fillcolor);
+          y++;
 
-    while(get_pixel(surface,x,y) != TRIANGLE_PENCOLOR){
-      while(get_pixel(surface,x,y) != TRIANGLE_PENCOLOR){
-        set_pixel(surface,x,y,triangle->fillcolor);
-        x++;
+        }
       }
-      y++;
+      else{break;}
     }
 
-}
 
+
+}
 /*
  * Draw a filled triangle on the given surface
  */
