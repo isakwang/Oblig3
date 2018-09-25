@@ -89,8 +89,8 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
 {
     triangle->rect.x = 1600;
     triangle->rect.y = 1600;
-    triangle->rect.w = 0;
-    triangle->rect.h = 0;
+    triangle->rect.w = 1000;
+    triangle->rect.h = 1000;
     // TODO: Insert code that calculates the bounding box of a triangle.
     // Remember to use the on-surface coordinates (triangle->sx1, etc.)
     // The bounding box coordinates should be written to
@@ -102,8 +102,8 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     //For loop that increases surface coordinate each cycle
     int *sx = &triangle->sx1;
     int *sy = &triangle->sy1;
-    int *sh = &triangle->sx1;
-    int *sw = &triangle->sy1;
+    int *sh = &triangle->sy1;
+    int *sw = &triangle->sx1;
     for (int i = 0; i < 4; i++) {
       if (*sx<triangle->rect.x) {
         triangle->rect.x = *sx;
@@ -114,11 +114,11 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
       }
 
       if (*sh>triangle->rect.y) {
-        triangle->rect.y = *sh;
+        triangle->rect.h = *sh;
       }
 
       if (*sw<triangle->rect.x) {
-        triangle->rect.x = *sw;
+        triangle->rect.w = *sw;
       }
       //Counts up by one
       sx += sizeof(int);
@@ -132,6 +132,7 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
 /*
  * Fill the triangle on the surface with the triangle's color
  */
+ int i =0;
 void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
 {
     // TODO: Insert code that fills the triangle with the color specified in triangle->fillcolor.
@@ -141,9 +142,13 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
     // the triangle on the surface (via the GetPixel function), you will find those
     // edges even if the triangle overlaps with a triangle that has already
     // been drawn on the surface
-    int x = (triangle->rect.x + triangle->rect.w)/2;
-    int y = (triangle->rect.y + triangle->rect.h)/2;
-    while(1){
+    int x = (triangle->sx1 + triangle->sx2 + triangle->sx3)/3;
+    int y = (triangle->sy1 + triangle->sy2 + triangle->sy3)/3;
+    //printf("\n%d,%d %d,%d %d,%d\n", triangle->sx1,triangle->sy1,triangle->sx2,triangle->sy2,triangle->sx3,triangle->sy3);
+    printf("laveste er %d og høyeste %d med sentrum %d\n",triangle->rect.x, triangle->rect.w, x);
+    //i++;
+    //printf("%d\n",i );
+    /*while(1){
       if(get_pixel(surface,x,y) != TRIANGLE_PENCOLOR){
         if(get_pixel(surface,x,y) != triangle->fillcolor){
           set_pixel(surface,x,y,triangle->fillcolor);
@@ -156,7 +161,7 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle)
         }
       }
       else{break;}
-    }
+    }*/
 
 
 
