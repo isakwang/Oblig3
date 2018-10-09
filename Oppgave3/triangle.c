@@ -141,6 +141,9 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     if (triangle->sy1 > triangle->rect.h){triangle->rect.h = triangle->sy1;}
     if (triangle->sy2 > triangle->rect.h){triangle->rect.h = triangle->sy2;}
     if (triangle->sy3 > triangle->rect.h){triangle->rect.h = triangle->sy3;}
+
+    triangle->rect.w = triangle->rect.w-triangle->rect.x;
+    triangle->rect.h = triangle->rect.h-triangle->rect.y;
 }
 
 /*
