@@ -6,8 +6,6 @@
 
 #define TRIANGLE_PENCOLOR   0xBBBB0000
 
-int midx;
-int midy;
 /*
  * Print triangle coordinates along with a message
  */
@@ -143,8 +141,6 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     if (triangle->sy1 > triangle->rect.h){triangle->rect.h = triangle->sy1;}
     if (triangle->sy2 > triangle->rect.h){triangle->rect.h = triangle->sy2;}
     if (triangle->sy3 > triangle->rect.h){triangle->rect.h = triangle->sy3;}
-
-    printf("trekanten har en boks på %dx%d med startpunkt (%d,%d)\n",triangle->rect.w, triangle->rect.h, triangle->rect.x,triangle->rect.y );
 }
 
 /*
@@ -163,31 +159,34 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle, int x, int y)
     // the triangle on the surface (via the GetPixel function), you will find those
     // edges even if the triangle overlaps with a triangle that has already
     // been drawn on the surface
-    printf("%d, %d\n",x,y);
     //Full første hjørne
-/*
-    for (int i = 0; i < triangle->rect.w/2; i++) {
-      if (get_pixel(surface,x+i+1,y) != TRIANGLE_PENCOLOR) {
-        set_pixel(surface,x+i,y,triangle->fillcolor);
-      }
+    /*
+    if (x<triangle->rect.x+triangle->rect.w && y<triangle->rect.y+triangle->rect.h) {
+      if(get_pixel(surface,x, y) != TRIANGLE_PENCOLOR &&
+           get_pixel(surface,x, y) != triangle->fillcolor)
+        {
+            set_pixel(surface,x, y, triangle->fillcolor);
+            fill_triangle(surface,triangle,x + 1, y);
+            fill_triangle(surface,triangle,x, y + 1);
+            fill_triangle(surface,triangle,x - 1, y);
+            fill_triangle(surface,triangle,x, y - 1);
+        }
     }*/
-    int i;
-    while(i<(triangle->rect.w*triangle->rect.h)*2){
-    if(get_pixel(surface,x,y)!=TRIANGLE_PENCOLOR && get_pixel(surface,x,y)!=triangle->fillcolor)
-    {
-        set_pixel(surface,x,y,triangle->fillcolor);
-        fill_triangle(surface, triangle, x+1,y);
-        fill_triangle(surface, triangle, x+1,y);
-        fill_triangle(surface, triangle, x+1,y);
-        fill_triangle(surface, triangle, x+1,y);
+
+    for (int i = 0; i < 15; i++) {
+        set_pixel(surface,x+i,y,triangle->fillcolor);
     }
-    i++;
-  }
 
 
 
 
 
+
+}
+
+int halfnumber(int i){
+  int resultat = i/2;
+  return resultat;
 }
 /*
  * Draw a filled triangle on the given surface
@@ -222,7 +221,7 @@ void draw_triangle(SDL_Surface *surface, triangle_t *triangle)
      draw_line(surface,triangle->sx3,triangle->sy3,triangle->sx1,triangle->sy1,TRIANGLE_PENCOLOR);
 
     /* Fill triangle */
-    midx = (triangle->sx1 + triangle->sx2 + triangle->sx3)/3;
-    midy = (triangle->sy1 + triangle->sy2 + triangle->sy3)/3;
-    fill_triangle(surface, triangle,midx,midy);
+    int sendx = triangle->sx1+halfnumber(triangle->rect.h);
+    int sendy = triangle->sy1+halfnumber(triangle->rect.h);
+    fill_triangle(surface, triangle,sendx,sendy);
 }
