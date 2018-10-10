@@ -128,10 +128,14 @@ int main(void)
      *
      * Remove these and draw the triangles that represent he teapot
      */
-     for (int i = 0; i < TEAPOT_NUMTRIANGLES; i++) {
+    /* for (int i = 0; i < TEAPOT_NUMTRIANGLES; i++) {
        //triangle_t teapotstuff = ;
        draw_triangle(surface, &teapot_model[i]);
-     }
+     }*/
+    draw_triangle(surface, &exampletriangle1);
+    draw_triangle(surface, &exampletriangle2);
+    draw_triangle(surface, &exampletriangle3);
+    draw_triangle(surface, &exampletriangle4);
 
     /* Update the texture, it to the video buffer and present it */
     SDL_UpdateTexture(texture, NULL, surface->pixels, surface->pitch);

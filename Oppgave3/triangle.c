@@ -65,9 +65,7 @@ void translate_triangle(triangle_t *triangle)
     // TODO: Insert code that moves the triangle on the surface.
     // The translation coordinates are specified in triangle->tx and triangle->ty.
     // Remember to use the on-surface coordinates (triangle->sx1, etc.)
-    //triangle->tx = (triangle->sx1+triangle->sx2+triangle->sx3)/3;
-  //  triangle->ty = (triangle->sy1+triangle->sy2+triangle->sy3)/3;
-    //printf("x er %d og y er %d\n",triangle->tx,triangle->ty );
+
     triangle->tx = 600;
     triangle->ty = 600;
     triangle->sx1 += triangle->tx;
@@ -89,8 +87,8 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
 {
     triangle->rect.x = 1600;
     triangle->rect.y = 1600;
-    triangle->rect.w = -600;
-    triangle->rect.h = -600;
+    triangle->rect.w = -1600;
+    triangle->rect.h = -1600;
     // TODO: Insert code that calculates the bounding box of a triangle.
     // Remember to use the on-surface coordinates (triangle->sx1, etc.)
     // The bounding box coordinates should be written to
@@ -99,33 +97,6 @@ void calculate_triangle_bounding_box(triangle_t *triangle)
     //Finds through all x points and sets the rect.x to the lowest one
     //Does the samething for rect.y and opposite for rect.w and rect.h
 
-    //For loop that increases surface coordinate each cycle
-    /*
-    int *sx = &triangle->sx1;
-    printf("%d\n", *sx);
-    int *sy = &triangle->sy1;
-    for (int i = 0; i < 3; i++) {
-      if (*sx < triangle->rect.x) {
-        triangle->rect.x = *sx;
-      }
-
-      if (*sy < triangle->rect.y) {
-        triangle->rect.y = *sy;
-      }
-
-      if (*sy > triangle->rect.h) {
-        triangle->rect.h = *sy;
-      }
-
-      if (*sx > triangle->rect.w) {
-        triangle->rect.w = *sx;
-      }
-      //Counts up by one
-      sx += sizeof(int);
-      sy += sizeof(int);
-    }
-    triangle->rect.w = triangle->rect.w-triangle->rect.x;
-    triangle->rect.h = triangle->rect.h-triangle->rect.y;*/
     if (triangle->sx1 < triangle->rect.x){triangle->rect.x = triangle->sx1;}
     if (triangle->sx2 < triangle->rect.x){triangle->rect.x = triangle->sx2;}
     if (triangle->sx3 < triangle->rect.x){triangle->rect.x = triangle->sx3;}
@@ -162,22 +133,22 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle, int x, int y)
     // the triangle on the surface (via the GetPixel function), you will find those
     // edges even if the triangle overlaps with a triangle that has already
     // been drawn on the surface
-    //Full første hjørne
-    /*
-    if (x<triangle->rect.x+triangle->rect.w && y<triangle->rect.y+triangle->rect.h) {
-      if(get_pixel(surface,x, y) != TRIANGLE_PENCOLOR &&
-           get_pixel(surface,x, y) != triangle->fillcolor)
-        {
-            set_pixel(surface,x, y, triangle->fillcolor);
-            fill_triangle(surface,triangle,x + 1, y);
-            fill_triangle(surface,triangle,x, y + 1);
-            fill_triangle(surface,triangle,x - 1, y);
-            fill_triangle(surface,triangle,x, y - 1);
-        }
-    }*/
 
-    for (int i = 0; i < 15; i++) {
-        set_pixel(surface,x+i,y,triangle->fillcolor);
+    if(get_pixel(surface,x, y) != TRIANGLE_PENCOLOR &&
+       get_pixel(surface,x, y) != triangle->fillcolor)
+    {
+        set_pixel(surface,x, y, triangle->fillcolor);
+        fill_triangle(surface,triangle,x+1,y);
+        fill_triangle(surface,triangle,x,y+1);
+        fill_triangle(surface,triangle,x-1,y);
+    }
+    if(get_pixel(surface,x, y) != TRIANGLE_PENCOLOR &&
+       get_pixel(surface,x, y) != triangle->fillcolor)
+    {
+        set_pixel(surface,x, y, triangle->fillcolor);
+        fill_triangle(surface,triangle,x,y+1);
+        fill_triangle(surface,triangle,x+1,y);
+        fill_triangle(surface,triangle,x-1,y);
     }
 
 
@@ -188,8 +159,8 @@ void fill_triangle(SDL_Surface *surface, triangle_t *triangle, int x, int y)
 }
 
 int halfnumber(int i){
-  int resultat = i/2;
-  return resultat;
+  int result = i/2;
+  return result;
 }
 /*
  * Draw a filled triangle on the given surface
@@ -224,7 +195,7 @@ void draw_triangle(SDL_Surface *surface, triangle_t *triangle)
      draw_line(surface,triangle->sx3,triangle->sy3,triangle->sx1,triangle->sy1,TRIANGLE_PENCOLOR);
 
     /* Fill triangle */
-    int sendx = triangle->sx1+halfnumber(triangle->rect.h);
-    int sendy = triangle->sy1+halfnumber(triangle->rect.h);
+    int sendx = (triangle->sx1+triangle->sx2+triangle->sx3)/3;
+    int sendy = (triangle->sy1+triangle->sy2+triangle->sy3)/3;
     fill_triangle(surface, triangle,sendx,sendy);
 }
